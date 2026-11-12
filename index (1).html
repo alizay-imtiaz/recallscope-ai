@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RecallScope AI — Supplier Recall Impact Mapper</title>
+<meta name="description" content="RecallScope AI is a hackathon concept for tracing supplier recall notices across authorized records on a UGREEN AI NAS and producing source-linked impact reports for human review. Front-end prototype with fictional data.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2317232D'/%3E%3Ccircle cx='15' cy='15' r='7' fill='none' stroke='%2316A6A0' stroke-width='3'/%3E%3Cpath d='M20 20l6 6' stroke='%23F28C52' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{--ch:#0E1A22;--iv:#EAF0EE;--te:#16A6A0;--tx:#0B6F6B;--co:#F28C52;--li:#B5C96B;--gr:#55636c;--ln:#d2dbd8;--red:#D8584E;--s2:#17272F;--ln2:#2b3f4a;--mu:#aab6bc;--d:"Bricolage Grotesque",system-ui,sans-serif;--b:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:calc(84px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--iv);color:var(--ch);font:16px/1.65 var(--b)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--ch);z-index:40}
+h1,h2,h3{font-family:var(--d);font-weight:700;line-height:1.08;margin:0 0 .5em;letter-spacing:-.025em}
+h1{font-size:clamp(2.6rem,6.4vw,4.9rem);font-weight:800;letter-spacing:-.035em}h2{font-size:clamp(1.9rem,3.6vw,2.8rem)}h3{font-size:1.12rem;line-height:1.25;letter-spacing:-.01em}
+p{margin:0 0 1em;max-width:66ch}a{color:var(--tx)}
+.w{max-width:1140px;margin:auto;padding:0 22px}section{padding:92px 0}
+.dk{background:var(--ch);color:#EAF0EE}.dk a{color:var(--te)}.wh{background:#fff}.iv{background:var(--iv)}
+.sub{color:var(--gr)}.dk .sub{color:var(--mu)}
+:focus-visible{outline:3px solid var(--co);outline-offset:3px}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:99}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--ch);color:#EAF0EE;border-bottom:1px solid var(--ln2)}
+nav{display:flex;flex-wrap:wrap;align-items:center;gap:6px 22px;padding:10px 0}
+.brand{display:flex;align-items:center;gap:10px;font:700 1.12rem var(--d);letter-spacing:-.01em;color:#EAF0EE;text-decoration:none;margin-right:auto}
+.lk{display:flex;gap:18px;overflow-x:auto;order:3;width:100%}
+.lk a{color:#c3cdd2;text-decoration:none;font-size:.86rem;font-weight:500;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent;transition:.2s}.lk a:hover{color:#fff;border-color:var(--te)}
+@media(min-width:980px){.lk{order:0;width:auto}nav{flex-wrap:nowrap}}
+.btn{display:inline-block;border:2px solid var(--co);background:var(--co);color:var(--ch);border-radius:8px;padding:12px 22px;font:700 .98rem var(--b);cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px);background:#f7a272}.btn.o{background:transparent;color:inherit;border-color:currentColor}.dk .btn.o{color:#EAF0EE}.btn.o:hover{background:rgba(255,255,255,.1)}
+.badge{display:inline-block;font:700 .72rem var(--b);padding:3px 10px;border-radius:99px;color:var(--ch);white-space:nowrap}
+.b-i{background:var(--co)}.b-d{background:var(--li)}.b-p{background:#d2d9d6}
+.ico{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:var(--ch);color:var(--te);margin-bottom:14px}.ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero{padding:76px 0 96px;background:var(--ch)}.hero .c{display:grid;gap:56px;grid-template-columns:1.05fr 1fr;align-items:center}
+@media(max-width:960px){.hero .c{grid-template-columns:1fr}}
+.kick{color:var(--te);font-weight:600;margin-bottom:18px}.hero h1 span{display:block;animation:u .7s ease-out both}.hero h1 span:nth-child(2){color:var(--co);animation-delay:.12s}.hero h1 span:nth-child(3){color:var(--li);animation-delay:.24s}
+@keyframes u{from{opacity:0;transform:translateY(14px)}}@keyframes t{from{transform:scaleY(0)}}@keyframes g{from{transform:scaleX(0)}}
+.hero .lead{font-size:1.15rem;color:#d3dbdf;margin:22px 0 28px}
+.mock{background:#fff;color:var(--ch);border-radius:12px;box-shadow:0 0 0 1px var(--ln2),0 40px 70px -24px rgba(0,0,0,.7);overflow:hidden}
+.mock .bar{display:flex;gap:6px;align-items:center;padding:10px 14px;background:var(--iv);font-size:.78rem;color:var(--gr)}.mock .bar i{width:10px;height:10px;border-radius:50%;background:#b8c4c0}
+.mock .in{padding:20px}.mock h3{margin:0 0 2px}
+.kp{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 18px}.kp div{background:var(--iv);border-radius:8px;padding:8px 10px;font-size:.72rem;color:var(--gr)}.kp b{display:block;font:700 1.35rem var(--d);color:var(--ch)}
+.rw{position:relative;margin:10px 0 0 28px;display:flex;justify-content:space-between;gap:8px;align-items:center;background:var(--iv);border-radius:8px;padding:10px 12px;font-size:.84rem}.rw small{display:block;color:var(--gr)}
+.rw:before{content:"";position:absolute;left:-19px;top:-11px;height:calc(50% + 11px);border-left:3px solid var(--te);transform-origin:top;animation:t .6s ease-out both}
+.rw:after{content:"";position:absolute;left:-26px;top:calc(50% - 6px);width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--te)}
+.kp+.rw:before{top:50%;height:50%}.rw+.rw:before{animation-delay:.3s}
+.rw+.rw+.rw:before{border-left:3px dashed var(--co);animation-delay:.6s}.rw+.rw+.rw:after{border-color:var(--co);border-style:dashed}
+.dist{display:flex;height:10px;border-radius:99px;overflow:hidden;margin-top:18px;background:var(--ln)}.dist i{height:100%;transform-origin:left;animation:g 1.2s ease-out both}
+.rules{padding:0;background:#fff;border-bottom:1px solid var(--ln)}.rules .w{display:grid;gap:8px 28px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));padding-top:26px;padding-bottom:26px}
+.rules .w>div{border-left:3px solid var(--co);padding-left:16px;font-size:.9rem;line-height:1.45;color:var(--gr)}.rules b{display:block;font:700 1.02rem var(--d);color:var(--ch)}
+.note{border:2px dashed var(--co);border-radius:8px;padding:10px 14px;font-size:.88rem;margin:0 0 18px;background:rgba(242,140,82,.12)}
+.g2{display:grid;gap:52px;grid-template-columns:1fr 1fr;align-items:start}@media(max-width:860px){.g2{grid-template-columns:1fr}}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:#fff;border:1px solid var(--ln);border-radius:12px;padding:24px}
+.dk .card{background:var(--s2);border-color:var(--ln2)}
+.pr{background:transparent;border:0;border-top:4px solid var(--co);border-radius:0;padding:18px 4px 0}.pr h3{display:flex;gap:10px}
+#features .grid{gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:14px;overflow:hidden}#features .card{border:0;border-radius:0;background:#fff}
+.sol{background:var(--ch);color:#EAF0EE;border-radius:14px;padding:34px}.sol li{margin:10px 0}.sol ul{padding-left:20px;margin:0}
+.tl{list-style:none;margin:0;padding:0;position:relative;counter-reset:s}.tl:before{content:"";position:absolute;left:19px;top:8px;bottom:8px;width:2px;background:var(--te);opacity:.5}
+.tl li{position:relative;padding:0 0 22px 60px;counter-increment:s}.tl li:before{content:counter(s);position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;background:var(--ch);border:2px solid var(--te);color:var(--te);display:grid;place-items:center;font-weight:700}
+.tl h3{margin:0 0 2px;color:#EAF0EE}.tl span{color:var(--mu)}
+table{width:100%;border-collapse:collapse;font-size:.92rem}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--ln);vertical-align:top}th{color:var(--gr);font-weight:600}.sc{overflow-x:auto}.dk td{border-color:var(--ln2)}
+.scen{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin:16px 0 22px;border:0;padding:0}
+.scen label{position:relative;display:block;cursor:pointer;border:2px solid var(--ln);border-radius:10px;padding:14px 16px;background:var(--iv);transition:.2s}.scen label:hover{border-color:var(--te)}
+.scen input{position:absolute;opacity:0}.scen label:has(input:checked){border-color:var(--te);background:#dff1ee}.scen label:has(input:focus-visible){outline:3px solid var(--co);outline-offset:3px}
+.res{background:var(--ch);color:#EAF0EE;border-radius:14px;padding:24px;margin-top:22px;animation:u .45s ease-out both}.res ul{margin:4px 0 14px;padding-left:20px}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}.kv div{background:var(--s2);border-radius:8px;padding:10px 14px;font-size:.82rem;color:var(--mu)}.kv b{display:block;color:#EAF0EE;font-size:1rem}
+.chip{display:inline-block;font:700 .78rem var(--b);padding:4px 12px;border-radius:6px;color:var(--ch)}
+.paper{background:#fff;border:1px solid var(--ln);border-left:6px solid var(--te);border-radius:4px 12px 12px 4px;padding:30px;box-shadow:0 24px 40px -30px rgba(14,26,34,.55)}
+.paper dl{display:grid;grid-template-columns:max-content 1fr;gap:8px 22px;margin:16px 0}.paper dt{color:var(--gr)}.paper dd{margin:0}@media(max-width:560px){.paper dl{grid-template-columns:1fr}}
+.paper ul{margin:4px 0 14px;padding-left:20px}.hr{background:#fdeee3;border-left:5px solid var(--co);border-radius:6px;padding:12px 16px;font-size:.92rem}
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:34px}@media(max-width:860px){.chain{grid-template-columns:1fr}}
+.nd{position:relative;padding:0 14px}.nd:not(:last-child):after{content:"";position:absolute;top:30px;left:calc(50% + 40px);right:calc(-50% + 40px);border-top:3px solid var(--te)}.nd.gap:before{content:"";position:absolute;top:30px;left:0;width:calc(50% - 40px);border-top:3px dashed var(--co)}
+@media(max-width:860px){.nd{display:flex;gap:16px;padding:0 0 22px}.nd:not(:last-child):after{top:64px;left:30px;right:auto;height:calc(100% - 64px);border-top:0;border-left:3px solid var(--te)}.nd.gap:before{display:none}}
+.nd .o{flex:none;width:60px;height:60px;border-radius:50%;background:var(--te);color:var(--ch);display:grid;place-items:center;margin:0 auto 12px;position:relative;z-index:1}.nd .o svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.nd.gap .o{background:var(--ch);border:3px dashed var(--co);color:var(--co)}.nd p{font-size:.88rem;color:#c3cdd2;margin:4px 0}.nd h3{margin:0}@media(min-width:861px){.nd{text-align:center}.nd p{margin-inline:auto}}
+.arch{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:20px}.arch div{padding:16px;border:1px solid var(--ln2);border-radius:10px;background:var(--s2);font-size:.9rem;text-align:center}
+.fin{background:var(--te);color:var(--ch);text-align:center;padding:96px 0}.fin p{margin:0 auto 1.2em}.fin .btn{background:var(--ch);border-color:var(--ch);color:#EAF0EE}
+footer{background:var(--ch);color:var(--mu);padding:30px 0;font-size:.86rem}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+
+.brand{white-space:nowrap}.dk a.btn{color:var(--ch)}.dk a.btn.o{color:#EAF0EE}.dbs .head{max-width:760px}.dbs .cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:22px 0 8px}.dbs .btn.big{padding:15px 30px;font-size:1.08rem}
+.dbp{margin-top:34px}.dbp .main{display:grid;grid-template-columns:200px 1fr}.dbp .sb{background:var(--ch);color:#c3cdd2;padding:14px 8px;font-size:.78rem}.dbp .sb b{display:block;color:#EAF0EE;font:700 .9rem var(--d);padding:0 8px 8px}
+.dbp .sb a{display:block;color:#c3cdd2;text-decoration:none;padding:5px 8px;border-left:3px solid transparent}.dbp .sb a:hover{color:#fff;border-color:var(--te);background:var(--s2)}.dbp .sb a.on{color:#fff;border-color:var(--te);background:var(--s2)}
+.dbp .pn .sub{color:var(--gr)}.dbp .pn{padding:18px;background:var(--iv);min-width:0}.dbp .k6{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:12px 0}.dbp .k6 div{background:#fff;border:1px solid var(--ln);border-top:4px solid;border-radius:8px;padding:6px 10px;font-size:.7rem;color:var(--gr);line-height:1.25}.dbp .k6 b{display:block;font:700 1.5rem var(--d);color:var(--ch)}
+.dbp .pt{display:grid;grid-template-columns:1.2fr 1fr;gap:12px}.dbp .pt>div{background:#fff;border:1px solid var(--ln);border-radius:8px;padding:12px;font-size:.78rem;min-width:0}.dbp .pt h4{margin:0 0 6px;font:700 .86rem var(--d)}
+.dbp .rr{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--ln)}.dbp .rr:last-child{border:0}.dbp .rr small{display:block;color:var(--gr)}
+.dbp .bb{display:flex;align-items:center;gap:6px;margin:5px 0}.dbp .bb span{width:92px;flex:none}.dbp .bb i{display:block;height:10px;border-radius:3px}
+.feat6{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:22px}.feat6 div{border:1px solid var(--ln2);background:var(--s2);border-radius:10px;padding:14px;font-size:.86rem;color:var(--mu)}.feat6 b{display:block;font:700 1.5rem var(--d);color:var(--te)}
+.honest{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+@media(max-width:860px){.dbp .main{grid-template-columns:1fr}.dbp .sb{display:flex;flex-wrap:wrap;gap:2px 10px}.dbp .sb b{width:100%}.dbp .sb a{border:0;padding:3px 6px}.dbp .k6{grid-template-columns:repeat(3,1fr)}.dbp .pt{grid-template-columns:1fr}}
+.qa .sum{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:20px 0}.qa .sum div{background:#fff;border:1px solid var(--ln);border-top:4px solid var(--ln);border-radius:10px;padding:12px 16px;font-size:.84rem;color:var(--gr)}.qa .sum b{display:block;font:700 2rem var(--d);color:var(--ch)}
+.qa .sum .p{border-top-color:var(--li)}.qa .sum .f{border-top-color:var(--red)}.qa .sum .n{border-top-color:#8a969e}
+.b-pass{background:var(--li)}.b-fail{background:var(--red);color:#fff}.b-nt{background:#d2d9d6}
+.qa h3{margin-top:30px}.qa ul.l{margin:6px 0 0;padding-left:20px}.qa ul.l li{margin:5px 0}.qa .cols{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+@media(max-width:700px){.qa table,.qa tbody,.qa tr,.qa td{display:block}.qa thead{display:none}.qa tr{border:1px solid var(--ln);border-radius:8px;margin-bottom:10px;padding:4px 0;background:#fff}.qa td{border:0;padding:4px 12px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6"/></symbol>
+<symbol id="tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8zM7.5 8.5h.01"/></symbol>
+<symbol id="cmp" viewBox="0 0 24 24"><path d="M3 5h8v14H3zM13 5h8v14h-8zM6 10h2M16 10h2M6 14h2M16 14h2"/></symbol>
+<symbol id="rte" viewBox="0 0 24 24"><circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h6a3 3 0 003-3V8"/></symbol>
+<symbol id="lay" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"/></symbol>
+<symbol id="lnk" viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></symbol>
+<symbol id="gap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></symbol>
+<symbol id="rep" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM9 8h6M9 12h6M9 16h3"/></symbol>
+<symbol id="inv" viewBox="0 0 24 24"><path d="M3 8l9-5 9 5v8l-9 5-9-5zM3 8l9 5 9-5M12 13v8"/></symbol>
+</defs></svg>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="w"><nav aria-label="Main">
+<a class="brand" href="#top"><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#16A6A0"/><circle cx="15" cy="15" r="6" fill="none" stroke="#17232D" stroke-width="3"/><path d="M20 20l6 6" stroke="#17232D" stroke-width="3" stroke-linecap="round"/></svg>RecallScope AI</a>
+<div class="lk"><a href="#problem">Problem</a><a href="#solution">Solution</a><a href="#how">Workflow</a><a href="#features">Features</a><a href="#dashboard">Dashboard</a><a href="#report">Report</a><a href="#trace">Traceability</a><a href="#testing">QA</a><a href="#responsible">Limits</a><a href="#roadmap">Roadmap</a></div>
+<a class="btn" href="dashboard.html" style="padding:8px 16px;white-space:nowrap">Launch demo</a></nav></div></header>
+
+<main id="main">
+<section class="hero dk" id="top"><div class="w c">
+<div>
+<p class="kick">RecallScope AI · Supplier Recall Impact Mapper</p>
+<h1><span>Trace the batch.</span><span>Map the impact.</span><span>Verify the evidence.</span></h1>
+<p class="lead">A concept for UGREEN Hackathon 2026 on AI NAS: trace a supplier recall notice across authorized purchase, inventory and dispatch records, and organize the findings into a source-linked report for a human reviewer.</p>
+<a class="btn" href="dashboard.html">Explore Interactive Demo</a> <a class="btn o" href="#testing">What is verified</a>
+<p class="sub" style="margin-top:22px;font-size:.88rem">This site is a front-end prototype with fictional data. It is not connected to a UGREEN NAS and runs no real AI analysis.</p>
+</div>
+<div class="mock" role="img" aria-label="Illustrative recall impact dashboard using fictional data">
+<div class="bar"><i></i><i></i><i></i>&nbsp;Illustrative mockup · fictional data</div>
+<div class="in"><h3>Case RS-DEMO-001</h3><span class="sub" style="font-size:.84rem">Harbor Oat Granola 500g · batch B-2291-07 (fictional)</span>
+<div class="kp"><div>Records<b>12</b></div><div>Exact<b>1</b></div><div>Possible<b>1</b></div><div>Gaps<b>2</b></div></div>
+<div class="rw"><span>Purchase order PO-1042<small>Line 3 lists B-2291-07</small></span><span class="chip" style="background:var(--li)">Exact match</span></div>
+<div class="rw" style="border-left-color:var(--co)"><span>Inventory INV-318<small>Batch recorded as B-2291</small></span><span class="chip" style="background:var(--co)">Possible match</span></div>
+<div class="rw" style="border-left-color:#8a969e"><span>Dispatch DN-7731<small>No batch field present</small></span><span class="chip" style="background:#cfcabd">Evidence gap</span></div>
+<div class="dist" aria-hidden="true"><i style="width:34%;background:var(--li)"></i><i style="width:26%;background:var(--co)"></i><i style="width:24%;background:var(--te)"></i><i style="width:16%;background:#8a969e"></i></div>
+<p class="sub" style="font-size:.78rem;margin:10px 0 0">Human review required before any action.</p></div></div>
+</div></section>
+
+<section class="rules" aria-label="Operating principles"><div class="w"><div><b>Humans decide.</b>Reports organize evidence; reviewers make the call.</div><div><b>No match is not a clear result.</b>Absence within scope never proves a product is unaffected.</div><div><b>Partial stays partial.</b>Uncertain matches are never shown as confirmed.</div></div></section>
+
+<section class="iv" id="problem"><div class="w">
+<h2>A recall notice is easy to read. Tracing it is not.</h2>
+<p class="sub">A supplier announces a recalled batch. The team now has to find out whether it ever reached their business, and the proof is rarely in one place.</p>
+<div class="grid" style="margin-top:28px">
+<div class="card pr"><h3>Scattered records</h3><p class="sub">Purchase orders, inventory files, dispatch notes and the supplier notice sit in different folders and formats.</p></div>
+<div class="card pr"><h3>Inconsistent identifiers</h3><p class="sub">B-2291-07, B-2291 and B2291/07 may or may not be the same batch. Someone has to judge.</p></div>
+<div class="card pr"><h3>Hard to audit</h3><p class="sub">A conclusion with no links to its source documents is difficult for a colleague to check later.</p></div>
+<div class="card pr"><h3>Silent gaps</h3><p class="sub">A dispatch note with no batch field is easy to overlook, and easy to mistake for “not affected”.</p></div>
+</div></div></section>
+
+<section class="wh" id="solution"><div class="w g2">
+<div><h2>From scattered files to an evidence trail</h2>
+<p>RecallScope AI is designed around one question: <em>where does this batch appear in our records?</em> It is not a generic document summarizer. Every finding carries a category and a source reference, and what could not be established is listed explicitly.</p>
+<p class="sub">Intended audiences: food distributors, wholesalers, inventory managers and operations teams. It is not deployed with any organization.</p></div>
+<div class="sol"><h3 style="color:var(--li)">What a reviewer gets</h3><ul><li>Six match categories that keep confirmed and uncertain results apart</li><li>Links from each finding back to its source record</li><li>Explicit evidence gaps and conflicts</li><li>A report that states a human must decide</li></ul>
+<div class="leg" id="leg"></div></div></div></section>
+
+<section class="dk" id="how"><div class="w g2">
+<div><h2>How it works</h2><p class="sub">Seven intended stages, from notice to report. This is the designed workflow; Testing shows what has been validated.</p>
+<span class="badge b-i">Design intention</span></div>
+<ol class="tl">
+<li><h3>Select a recall notice</h3><span>Pick the supplier notice to investigate.</span></li>
+<li><h3>Choose authorized records</h3><span>Limit the search to folders the team approves.</span></li>
+<li><h3>Extract identifiers</h3><span>Product names, supplier details, batch and lot numbers.</span></li>
+<li><h3>Compare across documents</h3><span>Match identifiers against purchase, inventory and dispatch records.</span></li>
+<li><h3>Connect evidence</h3><span>Link related purchase and dispatch records.</span></li>
+<li><h3>Classify and flag gaps</h3><span>Assign a match category and list missing information.</span></li>
+<li><h3>Generate the report</h3><span>Produce an impact report for human review.</span></li>
+</ol></div></section>
+
+<section class="iv" id="features"><div class="w">
+<h2>Core features</h2>
+<p class="sub">“Design intention” means specified but not yet verified on a supported NAS environment. Only the website and demo are built.</p>
+<div class="grid" style="margin-top:26px">
+<div class="card"><div class="ico"><svg><use href="#doc"/></svg></div><h3>Recall notice identification</h3><p class="sub">Find the supplier notice to trace.</p><span class="badge b-i">Design intention</span></div>
+<div class="card"><div class="ico"><svg><use href="#tag"/></svg></div><h3>Identifier extraction</h3><p class="sub">Product, supplier, batch and lot identifiers.</p><span class="badge b-i">Design intention</span></div>
+<div class="card"><div class="ico"><svg><use href="#cmp"/></svg></div><h3>Cross-document matching</h3><p class="sub">Compare identifiers across record types.</p><span class="badge b-i">Design intention</span></div>
+<div class="card"><div class="ico"><svg><use href="#rte"/></svg></div><h3>Purchase and dispatch tracing</h3><p class="sub">Follow a batch from receipt to shipment.</p><span class="badge b-i">Design intention</span></div>
+<div class="card"><div class="ico"><svg><use href="#lay"/></svg></div><h3>Match classification</h3><p class="sub">Six categories, never merged together.</p><span class="badge b-i">Design intention</span></div>
+<div class="card"><div class="ico"><svg><use href="#lnk"/></svg></div><h3>Evidence references</h3><p class="sub">Each finding points to its source.</p><span class="badge b-i">Design intention</span></div>
+<div class="card"><div class="ico"><svg><use href="#gap"/></svg></div><h3>Missing-information detection</h3><p class="sub">Report what the records do not say.</p><span class="badge b-i">Design intention</span></div>
+<div class="card"><div class="ico"><svg><use href="#rep"/></svg></div><h3>Impact report organization</h3><p class="sub">A review-ready report layout.</p><span class="badge b-i">Design intention</span></div>
+<div class="card" style="border-color:var(--li);border-width:2px"><div class="ico" style="color:var(--li)"><svg><use href="#inv"/></svg></div><h3>This website and demo</h3><p class="sub">Front-end prototype with fictional data.</p><span class="badge b-d">Built · front-end only</span></div>
+</div></div></section>
+
+<section class="dk dbs" id="dashboard"><div class="w">
+<div class="head"><span class="badge b-d">Built · front-end only</span><h2 style="margin-top:14px">Explore the Full RecallScope AI Dashboard</h2>
+<p class="sub">Ten working modules, six separate match categories, nine synthetic test scenarios, searchable evidence with reviewer statuses, and a report you can export. It runs entirely in your browser on fictional records.</p>
+<div class="cta"><a class="btn big" href="dashboard.html">Launch Interactive Dashboard</a><a class="btn o" href="#testing">See what has been tested</a></div>
+<p class="sub" style="font-size:.86rem">Fictional data. Folder selection is simulated and no AI extraction runs. Not connected to a UGREEN NAS.</p></div>
+<div class="mock dbp" role="group" aria-label="Preview of the dashboard with its default fictional data"><div class="bar"><i></i><i></i><i></i>&nbsp;Preview recreated from dashboard.html default data · not a screenshot · fictional</div>
+<div class="main"><div class="sb"><b>RecallScope AI</b><a href="dashboard.html#dash" class="on">Executive dashboard</a><a href="dashboard.html#new">New investigation</a><a href="dashboard.html#proc">Supplier &amp; procurement</a><a href="dashboard.html#recv">Receiving &amp; warehouse</a><a href="dashboard.html#disp">Dispatch &amp; downstream</a><a href="dashboard.html#evid">Evidence explorer</a><a href="dashboard.html#imp">Impact analysis</a><a href="dashboard.html#rep">Impact report</a><a href="dashboard.html#test">Test scenarios</a><a href="dashboard.html#arch">Architecture &amp; status</a></div>
+<div class="pn"><h3 style="margin:0">Executive dashboard</h3><span class="sub" style="font-size:.8rem">RS-2026-001 · Almond Butter 340g · batch L24-0917-B (fictional) · 18 records reviewed, 2 duplicates</span>
+<div class="k6"><div style="border-top-color:var(--li)">Exact<b>5</b></div><div style="border-top-color:var(--co)">Possible<b>3</b></div><div style="border-top-color:var(--te)">Product-level<b>1</b></div><div style="border-top-color:var(--red)">Conflicting<b>3</b></div><div style="border-top-color:#8a969e">Incomplete<b>2</b></div><div style="border-top-color:var(--ch)">No match<b>2</b></div></div>
+<div class="pt"><div><h4>Evidence records</h4>
+<div class="rr"><span>PO-4471<small>Purchase order · no batch field</small></span><span class="chip" style="background:var(--te)">Product-level</span></div>
+<div class="rr"><span>INV-88213<small>Invoice · batch L24-0917-B</small></span><span class="chip" style="background:var(--li)">Exact match</span></div>
+<div class="rr"><span>GRN-9040<small>Receipt · supplier differs</small></span><span class="chip" style="background:var(--red);color:#fff">Conflicting</span></div>
+<div class="rr"><span>GRN-9060<small>Receipt · batch blank</small></span><span class="chip" style="background:#cfcabd">Incomplete</span></div></div>
+<div><h4>Category distribution</h4><div class="bb"><span>Exact</span><i style="width:70%;background:var(--li)"></i><b>5</b></div><div class="bb"><span>Possible</span><i style="width:42%;background:var(--co)"></i><b>3</b></div><div class="bb"><span>Product-level</span><i style="width:14%;background:var(--te)"></i><b>1</b></div><div class="bb"><span>Conflicting</span><i style="width:42%;background:var(--red)"></i><b>3</b></div><div class="bb"><span>Incomplete</span><i style="width:28%;background:#8a969e"></i><b>2</b></div><div class="bb"><span>No match</span><i style="width:28%;background:var(--ch)"></i><b>2</b></div><p class="sub" style="font-size:.7rem;margin:8px 0 0">Counts exclude duplicates. No match does not prove a product is unaffected.</p></div></div></div></div></div>
+<div class="feat6"><div><b>10</b>modules, each reachable from the sidebar</div><div><b>6</b>distinct match categories, never merged</div><div><b>9</b>synthetic scenarios you can run</div><div><b>5</b>reviewer statuses on every evidence record</div><div><b>3</b>export routes: CSV, JSON and print/PDF, from current results</div></div>
+<div class="honest"><span class="badge b-d">Built: classification, search, review, exports</span><span class="badge b-i">Simulated: folder selection, extraction</span><span class="badge b-p">Planned: NAS integration</span><span class="badge b-p">Pending: real-data validation</span></div>
+</div></section>
+<section class="wh" id="demo"><div class="w">
+<h2>Quick sample analysis</h2><p class="sub">A four-scenario taster. The full dashboard above has all nine.</p>
+<div class="note"><strong>Interactive concept demo — fictional sample data. Not connected to a live UGREEN NAS.</strong> No real files, suppliers or AI analysis are involved.</div>
+<fieldset class="scen" id="scen"><legend class="sub" style="padding:0">Choose a synthetic scenario</legend></fieldset>
+<button class="btn" id="run" type="button">Run Sample Analysis</button>
+<div id="out" aria-live="polite"><p class="sub" style="margin-top:20px">Select a scenario and run the sample analysis to see the result. The full report below updates too.</p></div>
+</div></section>
+
+<section class="iv" id="report"><div class="w">
+<h2>Sample impact report</h2><p class="sub">Changes with the scenario selected above. Fictional data.</p>
+<div id="rep"></div></div></section>
+
+<section class="dk" id="trace"><div class="w">
+<h2>Evidence and traceability</h2>
+<p class="sub">The report is meant to show how a batch moves through records and where the trail breaks. Illustrative, fictional example.</p>
+<div class="chain">
+<div class="nd"><div class="o"><svg><use href="#doc"/></svg></div><div><h3>Recall notice</h3><p>Batch B-2291-07</p><span class="chip" style="background:var(--te)">Source</span></div></div>
+<div class="nd"><div class="o"><svg><use href="#lnk"/></svg></div><div><h3>Purchase order</h3><p>PO-1042, line 3</p><span class="chip" style="background:var(--li)">Exact match</span></div></div>
+<div class="nd"><div class="o"><svg><use href="#inv"/></svg></div><div><h3>Inventory</h3><p>INV-318 lists B-2291</p><span class="chip" style="background:var(--co)">Possible match</span></div></div>
+<div class="nd gap"><div class="o"><svg><use href="#gap"/></svg></div><div><h3>Dispatch</h3><p>DN-7731 has no batch field</p><span class="chip" style="background:#cfcabd">Evidence gap</span></div></div>
+</div></div></section>
+
+<section class="iv qa" id="testing"><div class="w">
+<h2>Quality Assurance &amp; Validation</h2>
+<div class="note"><strong>What “tested” means here.</strong> Automated browser checks (Playwright 1.63, headless Chromium, local files, 12 November 2026) of the website and dashboard on fictional data. They show the prototype behaves as designed. They are <strong>not</strong> validation against real records, a real NAS, or real recall events.</div>
+<div class="sum"><div class="p"><b>13</b>Check groups PASS</div><div class="f"><b>0</b>Open FAIL</div><div class="n"><b>6</b>NOT TESTED</div></div>
+<div class="sc"><table><thead><tr><th>Check</th><th>Test IDs</th><th>Result</th></tr></thead><tbody><tr><td><strong>Navigation</strong><br><span class="sub" style="font-size:.84rem">All 10 dashboard modules open and highlight in the sidebar</span></td><td>NAV</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Scenarios</strong><br><span class="sub" style="font-size:.84rem">All 9 scenarios run and each produces its expected category (6 categories + duplicates, different batches, conflicting dates)</span></td><td>SCN</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Metrics</strong><br><span class="sub" style="font-size:.84rem">Dashboard record count equals the per-record analysis; category tiles are computed, not hardcoded</span></td><td>CNT, CNT2</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Investigation form</strong><br><span class="sub" style="font-size:.84rem">Invalid input shows errors and blocks the run; valid input runs; reset restores the demo; no folder selected is rejected</span></td><td>FRM1–FRM5</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Search and filters</strong><br><span class="sub" style="font-size:.84rem">Evidence search, category filter and supplier filter narrow results; Enter on a focused row opens it</span></td><td>SRCH, FLT, FLT2, KEY</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Evidence review</strong><br><span class="sub" style="font-size:.84rem">Status and note saved, shown on the dashboard and in the report</span></td><td>REV, REV2</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Exports</strong><br><span class="sub" style="font-size:.84rem">CSV and JSON download with the current records and review data</span></td><td>CSV, JSON</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Print / PDF</strong><br><span class="sub" style="font-size:.84rem">Print stylesheet produces a PDF of the report page via headless <code>page.pdf</code>. The Print button’s browser dialog was not exercised</span></td><td>PDF</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Responsive layout</strong><br><span class="sub" style="font-size:.84rem">No horizontal overflow on 10 dashboard views and the landing page at 1440, 1024, 768 and 390 px; mobile menu navigates</span></td><td>OVF, MOB</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Site navigation</strong><br><span class="sub" style="font-size:.84rem">Landing page buttons open the dashboard; “Back to RecallScope AI” returns; all landing anchors resolve</span></td><td>LNK1, LNK2, ANC</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Preview accuracy</strong><br><span class="sub" style="font-size:.84rem">Landing-page preview numbers and sample records match the dashboard’s default results; its module links resolve</span></td><td>PRV</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Script errors</strong><br><span class="sub" style="font-size:.84rem">No JavaScript exceptions or console errors apart from blocked external font requests (the test machine was offline)</span></td><td>CON</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Layout defect (found in QA)</strong><br><span class="sub" style="font-size:.84rem">Evidence explorer overflowed horizontally at 768 and 1024 px in the first run. Fixed, re-run: no overflow</span></td><td>OVF</td><td><span class="badge b-pass">PASS</span></td></tr><tr><td><strong>Other browsers and devices</strong><br><span class="sub" style="font-size:.84rem">Firefox, Safari, real phones and tablets</span></td><td>—</td><td><span class="badge b-nt">NOT TESTED</span></td></tr><tr><td><strong>Accessibility</strong><br><span class="sub" style="font-size:.84rem">Screen readers, assistive tech and a formal contrast audit. Only keyboard row activation was checked</span></td><td>—</td><td><span class="badge b-nt">NOT TESTED</span></td></tr><tr><td><strong>Deployment</strong><br><span class="sub" style="font-size:.84rem">Live GitHub Pages hosting and Google Fonts rendering (tested from local files, offline)</span></td><td>—</td><td><span class="badge b-nt">NOT TESTED</span></td></tr><tr><td><strong>Performance</strong><br><span class="sub" style="font-size:.84rem">Load time or behaviour with large datasets</span></td><td>—</td><td><span class="badge b-nt">NOT TESTED</span></td></tr><tr><td><strong>PNG export</strong><br><span class="sub" style="font-size:.84rem">Not implemented, so not tested</span></td><td>—</td><td><span class="badge b-nt">NOT TESTED</span></td></tr><tr><td><strong>NAS and AI behaviour</strong><br><span class="sub" style="font-size:.84rem">UGREEN NAS integration, real document extraction, real records, accuracy of any kind</span></td><td>—</td><td><span class="badge b-nt">NOT TESTED</span></td></tr></tbody></table></div>
+<div class="cols"><div><h3>Scenarios supported</h3><ul class="l"><li>Exact batch match</li><li>Partial or truncated batch</li><li>Product-level match, no batch field</li><li>Conflicting supplier, SKU or batch</li><li>Incomplete records</li><li>No match in searched scope</li><li>Edge: duplicate records</li><li>Edge: different batches of one product</li><li>Edge: dispatch dated before receipt</li></ul></div>
+<div><h3>Known limitations</h3><ul class="l"><li>All data is fictional and built into the page; nothing is read from a NAS.</li><li>Folder selection is simulated; no AI extraction runs.</li><li>Matching rules are simple and conservative: normalised text comparison, one-character or truncated-prefix similarity.</li><li>Quantity conflicts are not checked; only dates.</li><li>State lives in memory and resets on reload.</li><li>PNG export is not available.</li><li>No match in scope never proves a product is unaffected; people make every decision.</li></ul></div></div>
+<p class="sub" style="margin-top:24px">Not claimed anywhere on this site: accuracy figures, time or cost savings, performance results, UGREEN endorsement. The synthetic scenarios are demonstrations, not test evidence from a NAS.</p>
+</div></section>
+
+<section class="iv" id="responsible"><div class="w g2">
+<div><h2>Responsible AI and limitations</h2><p class="sub">RecallScope AI supports an investigation. It does not replace the people responsible for it.</p></div>
+<div class="card" style="border-left:6px solid var(--co)"><ul style="margin:0;padding-left:20px"><li>Human reviewers make the final decisions.</li><li>It does not make final product-safety decisions.</li><li>It does not automatically change inventory.</li><li>It does not automatically notify customers.</li><li>Results depend on the authorized records selected.</li><li><strong>A missing match does not prove a product is unaffected.</strong></li><li>Partial matches must never be presented as confirmed matches.</li></ul></div>
+</div></section>
+
+<section class="dk" id="roadmap"><div class="w g2">
+<div><h2>Architecture</h2>
+<p class="sub">Design intention. Skill interfaces and capabilities must be confirmed against the official UGREEN Skill Starter Kit and hackathon documentation; none are asserted here.</p>
+<div class="arch"><div>Authorized records on UGREEN AI NAS</div><div>UGREEN Uliya Skill environment</div><div>Retrieval and extraction</div><div>Identifier comparison</div><div>Evidence-linked report</div></div></div>
+<div><h2>Roadmap</h2>
+<div class="sc"><table><tbody>
+<tr><td>Workflow design</td><td><span class="badge b-d">Drafted</span></td></tr>
+<tr><td>Front-end prototype and demo</td><td><span class="badge b-d">Built</span></td></tr>
+<tr><td>Skill implementation</td><td><span class="badge b-p">Not yet verified</span></td></tr>
+<tr><td>Synthetic scenario testing</td><td><span class="badge b-p">Pending</span></td></tr>
+<tr><td>Supported NAS environment validation</td><td><span class="badge b-p">Pending</span></td></tr>
+<tr><td>Future improvements</td><td><span class="badge b-i">Planned</span></td></tr>
+</tbody></table></div></div></div></section>
+
+<section class="fin"><div class="w">
+<h2>Trace the batch. Map the impact. Verify the evidence.</h2>
+<p>RecallScope AI: evidence-linked supplier recall tracing for a UGREEN AI NAS, designed to keep people in charge and uncertainty visible.</p>
+<a class="btn" href="dashboard.html">Explore Interactive Demo</a>
+</div></section>
+</main>
+<footer><div class="w">RecallScope AI · hackathon concept for UGREEN Hackathon 2026 on AI NAS. Not affiliated with or endorsed by UGREEN. All sample data on this site is fictional. <a href="dashboard.html" style="color:#fff">Interactive demo</a> · <a href="#top" style="color:#fff">Back to top</a></div></footer>
+
+<script>
+const CATS=[["Exact match","#B5C96B"],["Possible / partial match","#F28C52"],["Product-level match","#16A6A0"],["Conflicting evidence","#D8584E"],["Incomplete / missing evidence","#cfcabd"],["No match in searched scope","#F2EEE5"]];
+const S={
+exact:{n:"Exact batch match",id:"RS-DEMO-001",cat:0,rev:"12 (3 purchase, 4 inventory, 5 dispatch)",batch:"B-2291-07",ev:["PO-1042, line 3 lists batch B-2291-07","Dispatch DN-7731 ships 40 units to Customer A (fictional)"],gap:["None found within the searched scope"],guide:"Open both source records and confirm quantities before any action.",status:"Ready for human review"},
+partial:{n:"Partial identifier match",id:"RS-DEMO-002",cat:1,rev:"9 (2 purchase, 3 inventory, 4 dispatch)",batch:"B-2291-07 (notice) vs B-2291 (inventory)",ev:["Inventory record INV-318 lists B-2291","Purchase order PO-1042 does not state a batch"],gap:["Inventory batch appears truncated","No dispatch record links to this batch"],guide:"Do not treat as confirmed. Ask the supplier or receiving team to verify the full batch number.",status:"Needs clarification"},
+conflict:{n:"Conflicting evidence",id:"RS-DEMO-003",cat:3,rev:"14 (4 purchase, 4 inventory, 6 dispatch)",batch:"B-2291-07 vs B-2291-70",ev:["PO-1042 lists B-2291-07","Inventory INV-322 lists B-2291-70 for the same product"],gap:["Cannot tell which batch was received","Dispatch DN-7740 has no batch field"],guide:"Resolve the conflict from physical labels or the supplier invoice before drawing conclusions.",status:"Escalate to reviewer"},
+none:{n:"No matching record found",id:"RS-DEMO-004",cat:5,rev:"8 (2 purchase, 2 inventory, 4 dispatch)",batch:"B-2291-07",ev:["No record in the selected folders mentions this batch"],gap:["Search covered only 3 selected folders","Records outside scope were not examined"],guide:"This does NOT prove the product is unaffected. Widen the scope or check other sources.",status:"Inconclusive within scope"}
+};
+const $=id=>document.getElementById(id),li=a=>"<ul>"+a.map(x=>`<li>${x}</li>`).join("")+"</ul>",ch=c=>`<span class="chip" style="background:${c[1]};${c[1]=="#F2EEE5"?"border:1px solid #8a969e":""}">${c[0]}</span>`;
+$("leg").innerHTML=CATS.map(ch).join("");
+$("scen").insertAdjacentHTML("beforeend",Object.keys(S).map((k,i)=>`<label><input type="radio" name="sc" value="${k}" ${i?"":"checked"}><strong>${S[k].n}</strong><br><small class="sub">${S[k].id}</small></label>`).join(""));
+function report(s){const c=CATS[s.cat];return `<div class="paper"><h3 style="font-size:1.4rem">Impact report · ${s.id}</h3><p class="sub" style="margin:0">Fictional sample data. Not generated from a live NAS.</p>
+<dl><dt>Product</dt><dd>Harbor Oat Granola 500g (fictional)</dd><dt>Supplier</dt><dd>Northfield Foods (fictional)</dd><dt>Batch / lot</dt><dd>${s.batch}</dd><dt>Match category</dt><dd>${ch(c)}</dd><dt>Investigation status</dt><dd>${s.status}</dd><dt>Records reviewed</dt><dd>${s.rev}</dd></dl>
+<strong>Evidence source references</strong>${li(s.ev)}<strong>Uncertainty and gaps</strong>${li(s.gap)}
+<div class="hr"><strong>Human review required.</strong> ${s.guide} This report does not make a product-safety decision, and a missing match does not prove a product is unaffected.</div></div>`}
+function run(){const s=S[document.querySelector("input[name=sc]:checked").value];
+$("out").innerHTML=`<div class="res"><div class="kv"><div>Sample case ID<b>${s.id}</b></div><div>Scenario<b>${s.n}</b></div><div>Records reviewed<b>${s.rev}</b></div><div>Match status<b>${ch(CATS[s.cat])}</b></div></div>
+<strong>Related purchase / dispatch evidence</strong>${li(s.ev)}<strong>Evidence gaps</strong>${li(s.gap)}<p style="margin:0"><strong>Reviewer guidance:</strong> ${s.guide}</p><p style="margin:10px 0 0;font-size:.82rem;color:#b9c2c7">Fictional sample data. Full report in the section below.</p></div>`;
+$("rep").innerHTML=report(s);}
+$("run").addEventListener("click",run);
+$("rep").innerHTML=report(S.exact);
+</script>
+</body>
+</html>
